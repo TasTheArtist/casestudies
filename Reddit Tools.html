@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reddit Alt-Text Ecosystem Mockup (Dark Mode)</title>
+    <style>
+        /* --- General Page & Container Styling (LIGHT MODE) --- */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f7f8; /* Light background */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333; /* Dark text */
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .section-container {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #efefef;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            transition: color 0.3s, border-color 0.3s;
+        }
+        
+        /* --- DARK MODE STYLES --- */
+        .dark-mode {
+            background-color: #1a1a1b; /* Reddit Dark Background */
+            color: #d7dadc; /* Light gray text */
+        }
+        
+        .dark-mode .section-container {
+            background-color: #2b2b2c; /* Card background */
+            border-color: #3f3f40;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .dark-mode h2 {
+            color: #d7dadc;
+            border-bottom-color: #3f3f40;
+        }
+        
+        /* --- User Submission Flow --- */
+        .image-upload {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        .dark-mode .image-upload {
+            background-color: #3f3f40;
+            border-color: #555;
+            color: #d7dadc;
+        }
+
+        .image-placeholder {
+            height: 150px;
+            background-color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-style: italic;
+            overflow: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .dark-mode .image-placeholder {
+            background-color: #4a4a4b;
+            color: #bbb;
+        }
+        
+        .ai-status {
+            font-size: 10px;
+            color: #46d160; /* Green */
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        .alt-text-section label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #0079d3;
+        }
+
+        #altText {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid #c9c9c9;
+            border-radius: 4px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-size: 14px;
+            background-color: #fff;
+            color: #333;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .dark-mode #altText {
+            background-color: #1a1a1b;
+            border-color: #555;
+            color: #d7dadc;
+        }
+        
+        .helper-text {
+            font-size: 12px;
+            color: #555;
+            margin: 5px 0 10px 0;
+            transition: color 0.3s;
+        }
+        
+        .dark-mode .helper-text {
+            color: #aaa;
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 20px;
+            transition: color 0.3s;
+        }
+        
+        .dark-mode .char-counter {
+            color: #999;
+        }
+
+        #charCount {
+            font-weight: bold;
+            color: #333;
+            transition: color 0.3s;
+        }
+        
+        .dark-mode #charCount {
+            color: #d7dadc;
+        }
+
+        button {
+            background-color: #0079d3;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #005bb7;
+        }
+        
+        /* --- MODERATOR TOOL STYLES --- */
+        .mod-queue-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #fff;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        
+        .dark-mode .mod-queue-item {
+            background-color: #3f3f40;
+            border-color: #4a4a4b;
+        }
+
+        .post-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .flag {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 12px;
+            color: white;
+        }
+
+        .flag.missing {
+            background-color: #ff4500; /* Reddit Orange */
+        }
+        
+        .flag.present {
+            background-color: #46d160; /* Reddit Green */
+        }
+
+        .post-title {
+            font-weight: bold;
+            color: #333;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        
+        .dark-mode .post-title {
+            color: #d7dadc;
+        }
+
+        .mod-actions button {
+            background-color: #ff4500;
+            margin-right: 5px;
+            padding: 6px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+
+        .mod-actions .remind-button {
+            background-color: #0079d3;
+        }
+        
+        .mod-detail {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px dashed #ccc;
+            background-color: #fcfcfc;
+            font-size: 14px;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+        
+        .dark-mode .mod-detail {
+            background-color: #2b2b2c;
+            border-color: #555;
+            color: #d7dadc;
+        }
+        
+        .mod-detail p {
+            margin: 5px 0;
+        }
+        
+        .alt-text-content {
+            font-style: italic;
+            color: #666;
+            transition: color 0.3s;
+        }
+        
+        .dark-mode .alt-text-content {
+            color: #aaa;
+        }
+        
+        /* --- DARK MODE TOGGLE STYLES --- */
+        .mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            cursor: pointer;
+            font-size: 24px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            line-height: 1;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .dark-mode .mode-toggle {
+            background-color: rgba(50, 50, 50, 0.8);
+            color: #d7dadc;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div id="modeToggle" class="mode-toggle">
+        💡
+    </div>
+
+    <div class="section-container">
+        <h2>✏️ User Submission Flow: Alt-Text Pre-fill</h2>
+
+        <div class="image-upload">
+            <p>🖼️ **Image Preview** (Simulated)</p>
+            <div id="imagePlaceholder" class="image-placeholder">
+                [attachment_0](attachment)
+                <span class="ai-status">AI Analyzing...</span>
+            </div>
+        </div>
+        
+        <div class="alt-text-section">
+            <label for="altText">Image Description (Alt Text):</label>
+            <textarea id="altText" maxlength="500" placeholder="Describe the image content and purpose..."></textarea>
+            <p class="helper-text">Help users with screen readers! Review and edit the AI suggestion.</p>
+            <div class="char-counter">
+                <span id="charCount">0</span>/500 characters
+            </div>
+            
+            <button onclick="submitPost()">Post</button>
+        </div>
+    </div>
+
+    <div class="section-container">
+        <h2>🛠️ Moderator Queue: Missing Alt Text Filter</h2>
+
+        <p style="font-size: 14px;">Showing posts filtered by **Missing Alt Text** (Flagged by System)</p>
+
+        <div class="mod-queue-item">
+            <div class="post-info">
+                <span class="post-title">Look at my cute dog! (001)</span>
+                <span class="flag missing">MISSING ALT TEXT</span>
+            </div>
+            <div class="mod-detail">
+                <p><strong>Alt Text Status:</strong> None provided by user or AI.</p>
+                <p><strong>Image:</strong> Golden Retriever in motion.</p>
+                <div class="mod-actions">
+                    <button class="remind-button" onclick="modAction('Reminded User 001')">Remind User</button>
+                    <button onclick="modAction('Removed Post 001')">Remove Post</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mod-queue-item">
+            <div class="post-info">
+                <span class="post-title">My first sunrise photo (002)</span>
+                <span class="flag missing">MISSING ALT TEXT</span>
+            </div>
+            <div class="mod-detail">
+                <p><strong>Alt Text Status:</strong> Field cleared by user.</p>
+                <p><strong>Image:</strong> Landscape with a glowing horizon.</p>
+                <div class="mod-actions">
+                    <button class="remind-button" onclick="modAction('Reminded User 002')">Remind User</button>
+                    <button onclick="modAction('Added Alt Text Override 002')">Add Alt Text (Override)</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mod-queue-item">
+            <div class="post-info">
+                <span class="post-title">Homemade Cake Recipe (003)</span>
+                <span class="flag present">ALT TEXT PRESENT</span>
+            </div>
+            <div class="mod-detail">
+                <p><strong>Alt Text:</strong> <span class="alt-text-content">A three-layer chocolate cake with creamy white frosting and sliced strawberries on top.</span></p>
+                <div class="mod-actions">
+                    <button class="remind-button" style="background-color: #555;" onclick="modAction('Verified Post 003')">Verify Alt Text</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ==============================================
+        // JAVASCRIPT LOGIC
+        // ==============================================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const altTextField = document.getElementById('altText');
+            const charCountSpan = document.getElementById('charCount');
+            const imagePlaceholder = document.getElementById('imagePlaceholder');
+            const modeToggle = document.getElementById('modeToggle');
+            const MAX_CHARS = 500;
+            
+            // --- DARK MODE LOGIC ---
+            modeToggle.addEventListener('click', toggleDarkMode);
+
+            function toggleDarkMode() {
+                document.body.classList.toggle('dark-mode');
+                // Change the icon based on the mode
+                if (document.body.classList.contains('dark-mode')) {
+                    modeToggle.innerHTML = '☀️'; // Sun icon for light mode toggle
+                } else {
+                    modeToggle.innerHTML = '💡'; // Lightbulb icon for dark mode toggle
+                }
+            }
+
+            // Function to simulate AI image recognition and text generation
+            function autoGenerateAltText() {
+                // Hypothetical Image Data
+                const imageContent = {
+                    objects: ["golden retriever", "frisbee", "beach", "ocean"],
+                    setting: "sunny outdoor, daytime",
+                    action: "running and playing fetch"
+                };
+
+                // AI Model generates the descriptive text
+                const aiSuggestion = `A happy, ${imageContent.objects[0]} dog is ${imageContent.action} on a ${imageContent.setting} beach, carrying a bright red ${imageContent.objects[1]} in its mouth. There are small waves crashing in the background.`;
+                
+                // Simulate a short delay for processing (UX)
+                setTimeout(() => {
+                    altTextField.value = aiSuggestion;
+                    updateCharCount();
+                    // Update visual status
+                    imagePlaceholder.innerHTML = '[attachment_0](attachment)<span class="ai-status">✅ Alt Text Auto-Generated</span>';
+                }, 1000); // 1-second delay for simulation
+            }
+
+            // Start the AI process when the page loads
+            autoGenerateAltText();
+
+
+            // Character Count Update
+            altTextField.addEventListener('input', updateCharCount);
+
+            function updateCharCount() {
+                const currentLength = altTextField.value.length;
+                charCountSpan.textContent = currentLength;
+
+                if (currentLength >= MAX_CHARS * 0.9) {
+                    charCountSpan.style.color = '#ff4500';
+                } else {
+                    // Adjust character count color based on mode
+                    charCountSpan.style.color = document.body.classList.contains('dark-mode') ? '#d7dadc' : '#333';
+                }
+            }
+        });
+
+        // Submission Simulation (User Action)
+        function submitPost() {
+            const altText = document.getElementById('altText').value;
+            
+            if (altText.trim() === "") {
+                alert("Post submitted! Alt Text is missing and will be flagged for a moderator review.");
+            } else {
+                alert(`Post submitted successfully with Alt Text:\n\n"${altText}"`);
+            }
+        }
+        
+        // Moderator Action Simulation
+        function modAction(action) {
+            alert(`Moderator Action Taken: ${action}`);
+        }
+    </script>
+</body>
+</html>
